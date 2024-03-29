@@ -8,19 +8,19 @@ tools {
   stages{
         stage('Build'){
             steps{
-                bat 'mvn -Dmaven.test.skip=true clean install'
+                sh 'mvn -Dmaven.test.skip=true clean install'
             }
         }
         stage('Build Docker image'){
           steps{
-            bat 'docker-compose build'
+            sh 'docker-compose build'
           }
         }
         stage('Push Docker image'){
           steps{
             withCredentials([usernamePassword(credentialsId: 'dockerHubCredentials', usernameVariable: 'mttech', passwordVariable: 'talainimd658')]) {
-              bat "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
-              bat 'docker-compose push'
+              sh "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
+              sh 'docker-compose push'
             }
           }
         }
