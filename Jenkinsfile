@@ -12,4 +12,17 @@ tools {
             }
         }
   }
+  stage('Build Docker image'){
+      steps{
+        bat 'docker-compose build'
+      }
+    }
+    stage('Push Docker image'){
+      steps{
+        withCredentials([usernamePassword(credentialsId: 'dockerHubCredentials', usernameVariable: 'mttech', passwordVariable: 'talainimd658')]) {
+          bat "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
+          bat 'docker-compose push'
+        }
+      }
+    }
 }
